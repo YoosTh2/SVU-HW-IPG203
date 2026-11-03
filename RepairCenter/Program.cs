@@ -1,17 +1,19 @@
-﻿using RepairCenter.Models;
+Console.WriteLine("\n--- Validation tests ---");
 
-var due = DateTime.Now.AddDays(5);
+TryCreate(() => new Refrigerator("fridge1", "Ahmad", due, 300));                         // bad serial
+TryCreate(() => new WashingMachine("WM-2002", "", due, 8, true));                        // empty owner
+TryCreate(() => new AirConditioner("AC-3002", "Omar", DateTime.Now.AddDays(-1), 18000, false)); // past date
+TryCreate(() => new Refrigerator("FR-1002", "Lina", due, 0));                            // capacity 0
 
-var devices = new List<Appliance>
+static void TryCreate(Func<Appliance> create)
 {
-    new Refrigerator("FR-1001", "Ahmad", due, capacityLiters: 550, requiresGasRefill: true),
-    new WashingMachine("WM-2001", "Lina", due, maxLoadKg: 8, isFrontLoad: true, hasWaterLeak: true),
-    new AirConditioner("AC-3001", "Omar", due, coolingCapacityBtu: 24000, isInverter: true)
-};
-
-foreach (var d in devices)
-{
-    d.LaborHours = 2;
-    d.PartsCost = 50;
-    Console.WriteLine(d.GetSummary());
+    try
+    {
+        create();
+        Console.WriteLine("Accepted (unexpected!)");
+    }
+    catch (ArgumentException e)
+    {
+        Console.WriteLine($"Rejected: {e.Message}");
+    }
 }
