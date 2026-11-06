@@ -4,4 +4,4 @@ namespace RepairCenter.Events;
 
 ///هاد المفروض بيحدد شكل الدالة الي بستقبل تنبيه التأخير 
 
-publice delegate Void DeviceOverdueHandler(Appliance device);
+public delegate void DeviceOverdueHandler(Appliance device);
